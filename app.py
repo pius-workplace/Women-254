@@ -18,8 +18,7 @@ chroma_client = chromadb.PersistentClient(path="./chroma_db")
 chroma_collection = chroma_client.get_or_create_collection(name="shebot_documents")
 vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
-embed_model = OpenAIEmbedding(api_key=os.getenv("OPENAI_API_KEY"))  # Set your API key in env
-
+embed_model = OpenAIEmbedding(api_key=os.getenv("OPENAI_API_KEY"))  # Set your API key in e
 # Global index (load or create on startup)
 try:
     index = VectorStoreIndex.from_vector_store(vector_store=vector_store, embed_model=embed_model)
