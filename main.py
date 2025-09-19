@@ -9,10 +9,13 @@ import google.generativeai as genai
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+app.mount("/assets", StaticFiles(directory="templates/assets"), name="assets")
+app.mount("/forms", StaticFiles(directory="templates/forms"), name="forms")
 
 # Load environment variables
 load_dotenv()
@@ -29,7 +32,7 @@ import pandas as pd
 from llama_index.core import Document
 
 # Load CSV files and convert to documents
-csv_files = ["data/knowledge.csv", "data/shebot_dataset_2000.csv", "data/shebot_mental_health_1500.csv"]
+csv_files = ["data/knowledge.csv", "data/shebot_dataset_2000.csv", "data/shebot_mental_health_1500.csv","reddit_mental_health.csv"]
 documents = []
 
 for csv_file in csv_files:
@@ -45,7 +48,7 @@ chroma_client = chromadb.PersistentClient(path="./chroma_db_new")
 chroma_collection = chroma_client.get_or_create_collection(name="test_documents")
 vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
 
-# Use local HuggingFace embeddings
+# Use HuggingFace embeddings
 embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
@@ -66,6 +69,10 @@ templates = Jinja2Templates(directory="templates")
 async def get_chat_interface(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/main.html", response_class=HTMLResponse)
+async def get_main_interface(request: Request):
+    return templates.TemplateResponse("main.html", {"request": request})
+
 # API endpoint for queries with custom logic
 @app.get("/query")
 async def query_document(query: str):
@@ -73,7 +80,7 @@ async def query_document(query: str):
         # Default response if no index or LLM
         base_response = "I'm sorry, the AI service is currently unavailable. Please try again later or contact support."
     else:
-        system_prompt = "You are She Bot, a helpful assistant for women in Kenya facing harassment and mental health challenges. Always respond in the same language as the user's query. Provide empathetic, supportive, and relevant advice based on the knowledge base."
+        system_prompt = "You are Women254 Bot, a helpful assistant for women in Kenya facing harassment and mental health challenges. Always respond in the same language as the user's query. Provide empathetic, supportive, and relevant advice based on the knowledge base."
         query_engine = index.as_query_engine(llm=llm, system_prompt=system_prompt)
         response = query_engine.query(query)
         base_response = str(response)
@@ -84,19 +91,16 @@ async def query_document(query: str):
     if any(greeting in query_lower for greeting in greetings):
         # Detect language and respond in kind
         if any(word in query_lower for word in ["habari", "jambo", "niko", "sawa"]):
-            base_response = "Habari! Mimi ni She Bot, hapa kusaidia wanawake nchini Kenya wanaokabiliwa na unyanyasaji na changamoto za afya ya akili. Ninawezaje kukusaidia leo?"
+            base_response = "Habari! Mimi ni Women254 Bot, hapa kusaidia wanawake nchini Kenya wanaokabiliwa na unyanyasaji na changamoto za afya ya akili. Ninawezaje kukusaidia leo?"
         else:
-            base_response = "Hello! I am She Bot, here to support women in Kenya facing harassment and mental health challenges. How can I assist you today?"
-    # No else needed, keep the base_response from above
-
+            base_response = "Hello! I am Women254 Bot, here to support women in Kenya facing harassment and mental health challenges. How can I assist you today?"
+    # No else needed, keep the base_response from above if no greeting is detected
     # Append developer credit only if asked about the developer
     developer_keywords = ["who made", "who developed", "who created", "developer", "creator"]
     if any(keyword in query_lower for keyword in developer_keywords):
         base_response += " (Developed by Denis Pius)"
 
     return {"query": query, "response": base_response}
-
-
 
 if __name__ == "__main__":
     import uvicorn

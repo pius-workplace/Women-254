@@ -11,7 +11,7 @@ import datetime as dt
 import shutil
 import time
 
-app = FastAPI(title="SHEBot API", description="API for indexing and querying multiple documents using LlamaIndex and ChromaDB", version="0.1.0")
+app = FastAPI(title="Women254 API", description="API for indexing and querying multiple documents using LlamaIndex and ChromaDB", version="0.1.0")
 
 # ChromaDB setup (persistent)
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
@@ -39,7 +39,7 @@ class QueryResponse(BaseModel):
     retrieved: List[Dict]
     ts: str
 
-SYSTEM_PROMPT = """You are SHEBot: a Kenyan women’s safety assistant.
+SYSTEM_PROMPT = """You are Women254: a Kenyan women’s safety assistant.
 Follow Safety by Design: privacy-first, trauma‑informed, concise.
 If emergency keywords appear, return the emergency contacts first.
 Answer in the same language the user uses (English, Swahili, or Sheng) when possible.

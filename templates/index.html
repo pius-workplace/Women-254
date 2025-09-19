@@ -2,283 +2,724 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>She Bot - Chat</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
-            min-height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-        }
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Women254 - Safe Support for Women in Kenya</title>
+  <meta name="description"
+    content="Trauma-informed support for gender-based violence and mental health in Kenya. Access counseling, legal aid, and emergency help.">
+  <meta name="keywords"
+    content="GBV, gender-based violence, mental health, women support, Kenya, counseling, legal aid, emergency helpline">
 
-        .navbar {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+  <!-- Favicons -->
+  <link href="assets/img/women254.png" rel="icon">
+  <link href="assets/img/women254.png" rel="icon">
 
-        .welcome-section {
-            text-align: center;
-            padding: 80px 20px;
-            color: white;
-        }
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
 
-        .welcome-section h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        .welcome-section p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
 
-        .encouragement {
-            font-style: italic;
-            font-size: 1.1rem;
-            margin-top: 20px;
-        }
+  <!-- Custom Chat Styles -->
+  <style>
+    .chat-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
 
-        .chat-widget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
+    .floating-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4facfe 0%, #43e97b 100%);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+    }
 
-        .chat-container {
-            height: calc(100vh - 200px);
-            width: 100vw;
-            max-width: 400px;
-            overflow-y: auto;
-            display: none;
-        }
+    .floating-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
 
-        .message {
-            max-width: 80%;
-            margin-bottom: 8px;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 14px;
-        }
+    .chat-window {
+      position: fixed;
+      bottom: 0;
+      right: 20px;
+      width: 100%;
+      max-width: 400px;
+      height: 500px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: none;
+      flex-direction: column;
+      border-radius: 15px 15px 0 0;
+      overflow: hidden;
+      animation: slideUp 0.3s ease-out;
+      z-index: 1000;
+    }
 
-        .user-message {
-            background-color: #4facfe;
-            color: white;
-            margin-left: auto;
-        }
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+      }
 
-        .bot-message {
-            background-color: #43e97b;
-            color: white;
-        }
+      to {
+        transform: translateY(0);
+      }
+    }
 
-        .floating-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #4facfe 0%, #43e97b 100%);
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
+    .chat-header {
+      background: linear-gradient(135deg, #4facfe 0%, #43e97b 100%);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
 
-        .floating-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
+    .chat-header h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
 
-        .chat-window {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: none;
-            flex-direction: column;
-            animation: slideUp 0.3s ease-out;
-        }
+    .minimize-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
 
-        @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-            }
+    .minimize-btn:hover {
+      color: #f0f0f0;
+    }
 
-            to {
-                transform: translateY(0);
-            }
-        }
+    .chat-container {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #f6f6f6;
+    }
 
-        .chat-header {
-            background: linear-gradient(135deg, #4facfe 0%, #43e97b 100%);
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .message {
+      max-width: 75%;
+      margin-bottom: 10px;
+      padding: 10px 15px;
+      border-radius: 15px;
+      line-height: 1.4;
+      font-size: 0.9rem;
+      position: relative;
+    }
 
-        .minimize-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
+    .user-message {
+      background: #4facfe;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
 
-        @media (max-width: 768px) {
-            .chat-window {
-                max-width: 100vw;
-            }
-        }
-    </style>
+    .bot-message {
+      background: #43e97b;
+      color: white;
+      margin-right: auto;
+      border-bottom-left-radius: 5px;
+    }
+
+    .message::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 10px;
+      height: 10px;
+      background: inherit;
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+    }
+
+    .user-message::after {
+      right: -5px;
+      transform: rotate(45deg);
+    }
+
+    .bot-message::after {
+      left: -5px;
+      transform: rotate(-45deg);
+    }
+
+    .chat-input {
+      padding: 10px;
+      border-top: 1px solid #e0e0e0;
+      background: #fff;
+    }
+
+    .chat-input .input-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .chat-input button {
+      background: #4facfe;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .chat-input button:hover {
+      background: #43e97b;
+    }
+
+    @media (max-width: 576px) {
+      .chat-window {
+        max-width: 100%;
+        right: 0;
+        border-radius: 0;
+      }
+    }
+  </style>
 </head>
 
-<body>
-    <nav class="navbar p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h2 class="text-2xl font-bold text-green-600">Women254</h2>
-            <ul class="flex space-x-6">
-                <li><a href="#services" class="text-blue-600 hover:text-blue-800">Services</a></li>
-                <li><a href="#about" class="text-blue-600 hover:text-blue-800">About</a></li>
-                <li><a href="#contact" class="text-blue-600 hover:text-blue-800">Contact</a></li>
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="index.html" class="logo d-flex align-items-center me-auto">
+        <img src="assets/img/women254.png" alt="Women254 Bot Logo">
+        <h1 class="sitename">Women254 Bot</h1>
+      </a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html#hero" class="active">Home</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li class="dropdown"><a href="index.html#services"><span>Services</span> <i
+                class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="index.html#services">Counseling</a></li>
+              <li><a href="index.html#services">Legal Aid</a></li>
+              <li><a href="index.html#emergency">Emergency Support</a></li>
             </ul>
-        </div>
-    </nav>
-    <div class="welcome-section">
-        <h1>Empower Your Voice with She Bot</h1>
-        <p>Your trusted companion for support, advice, and empowerment in Kenya.</p>
-        <div class="encouragement">
-            "You are strong, you are capable, you are enough. Let's navigate challenges together."
-        </div>
+          </li>
+          <li><a href="index.html#emergency">Emergency</a></li>
+          <li><a href="#" id="chat-toggle-nav">Chat</a></li>
+          <li class="dropdown"><a href="#"><span>Language</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="#" data-lang="en">English</a></li>
+              <li><a href="#" data-lang="sw">Swahili</a></li>
+            </ul>
+          </li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <a class="btn-getstarted btn-emergency" href="index.html#emergency">Emergency Help</a>
     </div>
-    <div id="services" class="p-8 bg-white bg-opacity-80">
-        <h2 class="text-2xl font-bold text-center mb-6 text-green-600">Our Services</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="text-center p-4 border rounded-lg">
-                <h3 class="text-xl font-semibold text-blue-600">Harassment Support</h3>
-                <p>Get guidance on dealing with harassment and building resilience.</p>
+  </header>
+  <main class="main">
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+      <div class="hero-bg">
+        <img src="assets/img/hero-bg-light.webp" alt="">
+      </div>
+      <div class="container text-center">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+          <h1 data-aos="fade-up">Welcome to <span>She Bot</span></h1>
+          <p data-aos="fade-up" data-aos-delay="100">Your safe space for support and empowerment in Kenya. Access help
+            for gender-based violence and mental health.</p>
+          <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
+            <a href="#about" class="btn-get-started">Get Started</a>
+            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8"
+              class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch
+                Video</span></a>
+          </div>
+          <img src="assets/img/hero-services-img.webp" class="img-fluid hero-img" alt="" data-aos="zoom-out"
+            data-aos-delay="300">
+        </div>
+      </div>
+    </section><!-- /Hero Section -->
+    <!-- Featured Services Section -->
+    <section id="featured-services" class="featured-services section light-background">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-xl-4 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item d-flex">
+              <div class="icon flex-shrink-0"><i class="bi bi-shield-check"></i></div>
+              <div>
+                <h4 class="title"><a href="index.html#emergency" class="stretched-link">Immediate Support</a></h4>
+                <p class="description">Quick access to emergency helplines and crisis intervention for gender-based
+                  violence.</p>
+              </div>
             </div>
-            <div class="text-center p-4 border rounded-lg">
-                <h3 class="text-xl font-semibold text-blue-600">Mental Health</h3>
-                <p>Access resources and advice for mental well-being.</p>
+          </div>
+          <div class="col-xl-4 col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item d-flex">
+              <div class="icon flex-shrink-0"><i class="bi bi-heart"></i></div>
+              <div>
+                <h4 class="title"><a href="index.html#services" class="stretched-link">Counseling Services</a></h4>
+                <p class="description">Confidential mental health support and trauma-informed counseling for women in
+                  Kenya.</p>
+              </div>
             </div>
-            <div class="text-center p-4 border rounded-lg">
-                <h3 class="text-xl font-semibold text-blue-600">Empowerment</h3>
-                <p>Tools and tips to empower yourself and others.</p>
+          </div>
+          <div class="col-xl-4 col-lg-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item d-flex">
+              <div class="icon flex-shrink-0"><i class="bi bi-scale"></i></div>
+              <div>
+                <h4 class="title"><a href="index.html#services" class="stretched-link">Legal Assistance</a></h4>
+                <p class="description">Access to legal aid, protection orders, and support for survivors of GBV.</p>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-    <div id="about" class="p-8">
-        <h2 class="text-2xl font-bold text-center mb-6 text-blue-600">About Women254</h2>
-        <p class="text-center">Women254 is dedicated to supporting women in Kenya through technology and community. Our
-            AI-powered She Bot provides 24/7 assistance for harassment, mental health, and empowerment.</p>
-    </div>
-    <div id="contact" class="p-8 bg-white bg-opacity-80">
-        <h2 class="text-2xl font-bold text-center mb-6 text-green-600">Contact Us</h2>
-        <p class="text-center">Reach out to us at contact@women254.com for more information.</p>
-    </div>
-    <!-- Chat Widget -->
-    <div class="chat-widget">
-        <button id="chat-toggle" class="floating-btn" title="Text Chat">💬</button>
-    </div>
-    <!-- Chat Window -->
-    <div id="chat-window" class="chat-window">
-        <div class="chat-header">
-            <h3 class="text-lg font-bold">She Bot</h3>
-            <button id="minimize-btn" class="minimize-btn">×</button>
-        </div>
-        <div id="chat-container" class="chat-container p-4 flex flex-col space-y-2 overflow-y-auto">
-            <!-- Chat messages will be appended here -->
-        </div>
-        <div class="p-4 border-t">
-            <div class="flex items-center space-x-2">
-                <input type="text" id="user-input"
-                    class="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    placeholder="Type your message...">
-                <button id="send-button"
-                    class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-200">Send</button>
+      </div>
+    </section><!-- /Featured Services Section -->
+    <!-- About Section -->
+    <section id="about" class="about section">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
+            <p class="who-we-are">Who We Are</p>
+            <h3>Empowering Women in Kenya Through Safe Support</h3>
+            <p class="fst-italic">
+              She Bot is dedicated to providing trauma-informed support for women facing gender-based violence and
+              mental health challenges in Kenya. We offer confidential counseling, legal assistance, and immediate
+              emergency help.
+            </p>
+            <ul>
+              <li><i class="bi bi-check-circle"></i> <span>Confidential and safe counseling services.</span></li>
+              <li><i class="bi bi-check-circle"></i> <span>Legal aid for survivors of GBV.</span></li>
+              <li><i class="bi bi-check-circle"></i> <span>24/7 access to emergency helplines and resources.</span></li>
+            </ul>
+            <a href="index.html#services" class="read-more"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+          </div>
+          <div class="col-lg-6 about-images" data-aos="fade-up" data-aos-delay="200">
+            <div class="row gy-4">
+              <div class="col-lg-6">
+                <img src="assets/img/about-company-1.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="col-lg-6">
+                <div class="row gy-4">
+                  <div class="col-lg-12">
+                    <img src="assets/img/about-company-2.jpg" class="img-fluid" alt="">
+                  </div>
+                  <div class="col-lg-12">
+                    <img src="assets/img/about-company-3.jpg" class="img-fluid" alt="">
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+    </section><!-- /About Section -->
+    <!-- Services Section -->
+    <section id="services" class="services section light-background">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Our Services</h2>
+        <p>Comprehensive support for women facing gender-based violence and mental health challenges in Kenya.</p>
+      </div>
+      <div class="container">
+        <div class="row g-5">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item item-cyan position-relative">
+              <i class="bi bi-heart icon"></i>
+              <div>
+                <h3>Counseling Services</h3>
+                <p>Confidential, trauma-informed counseling for survivors of GBV and mental health support tailored to
+                  Kenyan women.</p>
+                <a href="index.html#services" class="read-more stretched-link">Learn More <i
+                    class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item item-orange position-relative">
+              <i class="bi bi-scale icon"></i>
+              <div>
+                <h3>Legal Assistance</h3>
+                <p>Access to legal aid, protection orders, and advocacy for survivors of gender-based violence in Kenya.
+                </p>
+                <a href="index.html#services" class="read-more stretched-link">Learn More <i
+                    class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item item-teal position-relative">
+              <i class="bi bi-shield-check icon"></i>
+              <div>
+                <h3>Emergency Support</h3>
+                <p>Immediate crisis intervention, safety planning, and access to emergency shelters for women in danger.
+                </p>
+                <a href="index.html#emergency" class="read-more stretched-link">Learn More <i
+                    class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item item-red position-relative">
+              <i class="bi bi-people icon"></i>
+              <div>
+                <h3>Community Support</h3>
+                <p>Peer support groups, community education, and empowerment programs for women and girls in Kenya.</p>
+                <a href="index.html#services" class="read-more stretched-link">Learn More <i
+                    class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item item-indigo position-relative">
+              <i class="bi bi-house-heart icon"></i>
+              <div>
+                <h3>Shelter Services</h3>
+                <p>Safe housing options and transitional support for women escaping abusive situations.</p>
+                <a href="index.html#services" class="read-more stretched-link">Learn More <i
+                    class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="service-item item-pink position-relative">
+              <i class="bi bi-chat-dots icon"></i>
+              <div>
+                <h3>Online Chat Support</h3>
+                <p>24/7 anonymous chat support for immediate advice and guidance on GBV and mental health issues.</p>
+                <a href="#chat" class="read-more stretched-link">Start Chat <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Services Section -->
+    <!-- Emergency Section -->
+    <section id="emergency" class="emergency section light-background">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Emergency Helplines</h2>
+        <p>Immediate support for gender-based violence and mental health crises in Kenya.</p>
+      </div>
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="info-item d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-telephone-fill"></i>
+              <h3>Gender Violence Recovery Fund</h3>
+              <p>Call: 1199 (Toll-free)</p>
+              <p>Support for survivors of gender-based violence across Kenya.</p>
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="info-item d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-telephone-fill"></i>
+              <h3>Befrienders Kenya</h3>
+              <p>Call: +254 722 178 177</p>
+              <p>24/7 emotional support for mental health crises.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Emergency Section -->
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Contact Us</h2>
+        <p>Reach out for support or to learn more about our services for women in Kenya.</p>
+      </div>
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-6">
+            <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up"
+              data-aos-delay="200">
+              <i class="bi bi-geo-alt"></i>
+              <h3>Address</h3>
+              <p>Nairobi, Kenya</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up"
+              data-aos-delay="300">
+              <i class="bi bi-telephone"></i>
+              <h3>Call Us</h3>
+              <p>+254 706748425</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up"
+              data-aos-delay="400">
+              <i class="bi bi-envelope"></i>
+              <h3>Email Us</h3>
+              <p>info@women254gmail.com</p>
+            </div>
+          </div>
+        </div>
+        <div class="row gy-4 mt-1">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus"
+              frameborder="0" style="border:0; width: 100%; height: 400px;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <div class="col-lg-6">
+            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up"
+              data-aos-delay="400">
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                </div>
+                <div class="col-md-6">
+                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+                </div>
+                <div class="col-md-12">
+                  <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+                </div>
+                <div class="col-md-12">
+                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+                </div>
+                <div class="col-md-12 text-center">
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Your message has been sent. Thank you!</div>
+                  <button type="submit">Send Message</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Contact Section -->
+  </main>
+  <footer id="footer" class="footer position-relative light-background">
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Women254</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Nairobi, Kenya</p>
+            <p>Supporting women across Kenya</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+254 722 178 177</span></p>
+            <p><strong>Email:</strong> <span>info@women254.gmail.com</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href="https://twitter.com/shebot"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://facebook.com/shebot"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/shebot"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com/company/shebot"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="index.html#hero">Home</a></li>
+            <li><a href="index.html#about">About us</a></li>
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#terms">Terms of service</a></li>
+            <li><a href="index.html#privacy">Privacy policy</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><a href="index.html#services">Counseling</a></li>
+            <li><a href="index.html#services">Legal Aid</a></li>
+            <li><a href="index.html#emergency">Emergency Support</a></li>
+            <li><a href="index.html#services">Community Support</a></li>
+            <li><a href="index.html#services">Shelter Services</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-12 footer-newsletter">
+          <h4>Our Newsletter</h4>
+          <p>Subscribe to our newsletter and receive the latest news about our services and support programs!</p>
+          <form action="forms/newsletter.php" method="post" class="php-email-form">
+            <div class="newsletter-form"><input type="email" name="email" placeholder="Your email"><input type="submit"
+                value="Subscribe"></div>
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+          </form>
+        </div>
+      </div>
     </div>
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename"> Women254</strong><span> All Rights
+          Reserved</span></p>
+      <div class="credits">Designed by Denisastra 
+      </div>
+    </div>
+  </footer>
+  <!-- Chat Widget-->
+  <div class="chat-widget">
+    <button id="chat-toggle" class="floating-btn" title="Text Chat" aria-label="Open chat with She Bot">💬</button>
+  </div> 
+  <!-- Chat Window -->
+  <div id="chat-window" class="chat-window">
+    <div class="chat-header">
+      <h3>women254 Bot</h3>
+      <button id="minimize-btn" class="minimize-btn" aria-label="Close chat window">×</button>
+    </div>
+    <div id="chat-container" class="chat-container">
+      <!-- Chat messages will be appended here -->
+    </div>
+    <div class="chat-input">
+      <div class="input-group">
+        <input type="text" id="user-input" placeholder="Type your message..." aria-label="Type your message">
+        <button id="send-button" aria-label="Send message">Send</button>
+      </div>
+    </div>
+  </div>
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <!-- Preloader -->
+  <div id="preloader"></div>
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <elevenlabs-convai agent-id="agent_5001k54xwjwye7xbz9sqkjz8sqfn"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+  <!-- Main JS File -->
+   
+  <script src="assets/js/main.js"></script>
+  <!-- Chat JavaScript -->
+ <script>
+  const chatToggle = document.getElementById('chat-toggle');
+  const chatToggleNav = document.getElementById('chat-toggle-nav');
+  const chatWindow = document.getElementById('chat-window');
+  const minimizeBtn = document.getElementById('minimize-btn');
+  const chatContainer = document.getElementById('chat-container');
+  const userInput = document.getElementById('user-input');
+  const sendButton = document.getElementById('send-button');
+  const languageLinks = document.querySelectorAll('.navmenu a[data-lang]');
+  let selectedLanguage = 'en'; // Default language
 
-    <script>
-        const chatToggle = document.getElementById('chat-toggle');
-        const chatWindow = document.getElementById('chat-window');
-        const minimizeBtn = document.getElementById('minimize-btn');
-        const chatContainer = document.getElementById('chat-container');
-        const userInput = document.getElementById('user-input');
-        const sendButton = document.getElementById('send-button');
+  // Toggle chat window
+  function toggleChatWindow(e) {
+    e.preventDefault();
+    chatWindow.style.display =
+      chatWindow.style.display === 'flex' ? 'none' : 'flex';
+    if (chatWindow.style.display === 'flex') {
+      userInput.focus(); // Focus input when chat opens
+    }
+  }
+  chatToggle.addEventListener('click', toggleChatWindow);
+  if (chatToggleNav) chatToggleNav.addEventListener('click', toggleChatWindow);
+  minimizeBtn.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+  });
 
-        // Toggle chat window
-        chatToggle.addEventListener('click', () => {
-            chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
-        });
+  // Language toggle
+  languageLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectedLanguage = link.getAttribute('data-lang');
+      console.log(`Language switched to: ${selectedLanguage}`);
+      addMessage(
+        `Language set to ${selectedLanguage === 'en' ? 'English' : 'Swahili'
+        }.`,
+        'bot-message'
+      );
+    });
+  });
 
-        minimizeBtn.addEventListener('click', () => {
-            chatWindow.style.display = 'none';
-        });
+  // Add message to chat box
+  function addMessage(text, className) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${className}`;
+    messageDiv.textContent = text;
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
 
-        sendButton.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+  // Send user message
+  async function sendMessage() {
+    const message = userInput.value.trim();
+    if (!message) return;
 
-        function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
+    // Show user message
+    addMessage(message, 'user-message');
+    userInput.value = '';
 
-            // Display user message
-            addMessage(message, 'user-message');
-            userInput.value = '';
-
-            // Send to API and display response
-            console.log('Sending query:', message);
-            fetch(`/query?query=${encodeURIComponent(message)}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Received data:', data);
-                    const botResponse = data.response || 'No response received from server.';
-                    addMessage(botResponse, 'bot-message');
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    addMessage('Error: Could not get response. Please try again or contact support.', 'bot-message');
-                });
+    // Send to API with language parameter
+    try {
+      const response = await fetch(
+        `http://localhost:8000/query?query=${encodeURIComponent(userInput)}`,
+        {
+          method: "GET",
         }
+      );
 
-        function addMessage(text, className) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${className}`;
-            messageDiv.textContent = text;
-            chatContainer.appendChild(messageDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-    </script>
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('API Response:', data); // 👈 Debugging log
+
+      const botResponse =
+        (data && data.response) ||
+        (selectedLanguage === 'sw'
+          ? 'Samahani, sikupata majibu kwa sasa.'
+          : 'Sorry, I could not get a response right now.');
+      addMessage(botResponse, 'bot-message');
+    } catch (error) {
+      console.error('Fetch error:', error);
+      const errorMessage =
+        selectedLanguage === 'sw'
+          ? 'Hitilafu: Hatuwezi kupata jibu. Tafadhali jaribu tena au wasiliana na 1199 (GBV) au +254 722 178 177 (Afya ya Akili).'
+          : 'Error: Could not get response. Please try again or contact 1199 (GBV) or +254 722 178 177 (Mental Health).';
+      addMessage(errorMessage, 'bot-message');
+    }
+  }
+
+  sendButton.addEventListener('click', sendMessage);
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  // Initial greeting
+  addMessage(
+    selectedLanguage === 'sw'
+      ? 'Habari! Mimi ni Women254 Bot, niko hapa kukusaidia na changamoto za unyanyasaji wa kijinsia na afya ya akili nchini Kenya. Ninawezaje kukusaidia leo?'
+      : 'Hello! I am Women254 Bot, here to support women in Kenya with gender-based violence and mental health challenges. How can I assist you today?',
+    'bot-message'
+  );
+</script>
+
 </body>
 
 </html>
